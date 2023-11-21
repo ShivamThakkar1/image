@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Random Image Viewer</title>
+  <title>Random Image Downloader</title>
 </head>
 <body>
-  <h1>Random Image</h1>
-  <img id="randomImage" src="" alt="Random Image">
-  <p id="imageUrl">Image URL: </p>
+  <h1>Random Image Downloader</h1>
+  <a id="downloadLink" href="" download="image.jpg" style="display: none;"></a>
+  <img id="randomImage" src="" alt="Random Image" style="display: none;">
   
   <script>
     // Function to fetch the contents of a GitHub folder
@@ -28,20 +28,17 @@
       return images[randomIndex].download_url;
     }
 
-    // Function to display a random image
-    async function displayRandomImage(owner, repo, path) {
+    // Function to download a random image
+    async function downloadRandomImage(owner, repo, path) {
       try {
         const contents = await fetchGitHubFolderContents(owner, repo, path);
         const imageFiles = filterImageFiles(contents);
         
         if (imageFiles.length > 0) {
           const randomImageUrl = getRandomImageUrl(imageFiles);
-          document.getElementById('randomImage').src = randomImageUrl;
-          document.getElementById('imageUrl').textContent = `Image URL: ${randomImageUrl}`;
-          // Update the URL in the webpage to the image URL
-          const currentUrl = new URL(window.location.href);
-          currentUrl.searchParams.set('image', randomImageUrl);
-          window.history.replaceState({}, document.title, currentUrl);
+          const downloadLink = document.getElementById('downloadLink');
+          downloadLink.href = randomImageUrl;
+          downloadLink.click();
         } else {
           console.error('No image files found in the specified folder.');
         }
@@ -50,12 +47,12 @@
       }
     }
 
-    // Call the function when the page loads
+    // Call the function to download a random image when the page loads
     window.onload = () => {
       const owner = 'ShivamThakkar1';
       const repo = 'image.jpg';
       const path = 'images'; // Replace 'images' with your folder path
-      displayRandomImage(owner, repo, path);
+      downloadRandomImage(owner, repo, path);
     };
   </script>
 </body>
