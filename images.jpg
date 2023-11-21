@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Image Viewer</title>
+</head>
+<body>
+  <h1>Random Image</h1>
+  <img id="randomImage" src="" alt="Random Image">
+  
+  <script>
+    // Function to fetch the contents of a GitHub folder
+    async function fetchGitHubFolderContents(owner, repo, path) {
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+      const data = await response.json();
+      return data;
+    }
+
+    // Function to filter only image files from the fetched contents
+    function filterImageFiles(contents) {
+      return contents.filter(item => item.type === 'file' && item.name.match(/\.(jpeg|jpg|png|gif)$/i));
+    }
+
+    // Function to get a random image URL
+    function getRandomImageUrl(images) {
+      const randomIndex = Math.floor(Math.random() * images.length);
+      return images[randomIndex].download_url;
+    }
+
+    // Function to display a random image
+    async function displayRandomImage(owner, repo, path) {
+      try {
+        const contents = await fetchGitHubFolderContents(owner, repo, path);
+        const imageFiles = filterImageFiles(contents);
+        
+        if (imageFiles.length > 0) {
+          const randomImageUrl = getRandomImageUrl(imageFiles);
+          document.getElementById('randomImage').src = randomImageUrl;
+        } else {
+          console.error('No image files found in the specified folder.');
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    }
+
+    // Call the function when the page loads
+    window.onload = () => {
+      const owner = 'your_username';
+      const repo = 'your_repository';
+      const path = 'images'; // Replace 'images' with your folder path
+      displayRandomImage(owner, repo, path);
+    };
+  </script>
+</body>
+</html>
