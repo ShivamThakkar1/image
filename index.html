@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Random Image Redirect</title>
+  <title>Redirect to Random Image</title>
 </head>
 <body>
-  <h1>Redirecting to Random Image...</h1>
+  <h1>Redirecting to a Random Image...</h1>
   
   <script>
     // Function to fetch the contents of a GitHub repository
@@ -26,8 +26,8 @@
       return images[randomIndex].name; // Return the image name
     }
 
-    // Function to redirect to a random image URL
-    async function redirectToRandomImage(owner, repo) {
+    // Function to redirect to a specific image URL
+    async function redirectToSpecificImage(owner, repo) {
       try {
         const contents = await fetchGitHubRepoContents(owner, repo, '');
         const imageFiles = filterImageFiles(contents);
@@ -48,7 +48,7 @@
     window.onload = () => {
       const owner = 'ShivamThakkar1';
       const repo = 'image.jpg'; // Replace 'image.jpg' with your repository name
-      redirectToRandomImage(owner, repo);
+      redirectToSpecificImage(owner, repo);
     };
   </script>
 </body>
