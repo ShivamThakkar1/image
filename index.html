@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Random Image Downloader</title>
+  <title>Random Image Redirect</title>
 </head>
 <body>
-  <h1>Random Image Downloader</h1>
-  <a id="downloadLink" href="" download="image.jpg" style="display: none;"></a>
-  <img id="randomImage" src="" alt="Random Image" style="display: none;">
+  <h1>Redirecting to Random Image...</h1>
   
   <script>
     // Function to fetch the contents of a GitHub folder
@@ -25,20 +23,19 @@
     // Function to get a random image URL
     function getRandomImageUrl(images) {
       const randomIndex = Math.floor(Math.random() * images.length);
-      return images[randomIndex].download_url;
+      return images[randomIndex].name; // Return the image name
     }
 
-    // Function to download a random image
-    async function downloadRandomImage(owner, repo, path) {
+    // Function to redirect to a random image URL
+    async function redirectToRandomImage(owner, repo, path) {
       try {
         const contents = await fetchGitHubFolderContents(owner, repo, path);
         const imageFiles = filterImageFiles(contents);
         
         if (imageFiles.length > 0) {
-          const randomImageUrl = getRandomImageUrl(imageFiles);
-          const downloadLink = document.getElementById('downloadLink');
-          downloadLink.href = randomImageUrl;
-          downloadLink.click();
+          const randomImageName = getRandomImageUrl(imageFiles);
+          const newUrl = `https://${owner}.github.io/${repo}/images/${randomImageName}`;
+          window.location.replace(newUrl);
         } else {
           console.error('No image files found in the specified folder.');
         }
@@ -47,12 +44,12 @@
       }
     }
 
-    // Call the function to download a random image when the page loads
+    // Call the function when the page loads
     window.onload = () => {
       const owner = 'ShivamThakkar1';
       const repo = 'image.jpg';
       const path = 'images'; // Replace 'images' with your folder path
-      downloadRandomImage(owner, repo, path);
+      redirectToRandomImage(owner, repo, path);
     };
   </script>
 </body>
