@@ -8,8 +8,8 @@
   <h1>Redirecting to Random Image...</h1>
   
   <script>
-    // Function to fetch the contents of a GitHub folder
-    async function fetchGitHubFolderContents(owner, repo, path) {
+    // Function to fetch the contents of a GitHub repository
+    async function fetchGitHubRepoContents(owner, repo, path) {
       const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
       const data = await response.json();
       return data;
@@ -27,29 +27,28 @@
     }
 
     // Function to redirect to a random image URL
-    async function redirectToRandomImage(owner, repo, path) {
+    async function redirectToRandomImage(owner, repo) {
       try {
-        const contents = await fetchGitHubFolderContents(owner, repo, path);
+        const contents = await fetchGitHubRepoContents(owner, repo, '');
         const imageFiles = filterImageFiles(contents);
         
         if (imageFiles.length > 0) {
           const randomImageName = getRandomImageUrl(imageFiles);
-          const newUrl = `https://${owner}.github.io/${repo}/images/${randomImageName}`;
+          const newUrl = `https://${owner}.github.io/${repo}/${randomImageName}`;
           window.location.replace(newUrl);
         } else {
-          console.error('No image files found in the specified folder.');
+          console.error('No image files found in the repository.');
         }
       } catch (error) {
-        console.error('Error fetching images:', error);
+        console.error('Error fetching repository contents:', error);
       }
     }
 
     // Call the function when the page loads
     window.onload = () => {
       const owner = 'ShivamThakkar1';
-      const repo = 'image.jpg';
-      const path = 'images'; // Replace 'images' with your folder path
-      redirectToRandomImage(owner, repo, path);
+      const repo = 'image.jpg'; // Replace 'image.jpg' with your repository name
+      redirectToRandomImage(owner, repo);
     };
   </script>
 </body>
